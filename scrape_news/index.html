@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>📰 Newsletter Topics - 2025-04-10</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 2rem;
+      color: #333;
+    }
+
+    .topic {
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .title a {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #1a73e8;
+      text-decoration: none;
+    }
+
+    .title a:hover {
+      text-decoration: underline;
+    }
+
+    .date {
+      font-size: 0.9rem;
+      color: #777;
+      margin-bottom: 1rem;
+    }
+
+    .topic img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin: 1rem 0;
+    }
+
+    .section-header {
+      font-weight: bold;
+      margin-top: 1.5rem;
+      color: #555;
+    }
+
+    .content {
+      margin-top: 0.5rem;
+      white-space: pre-wrap;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📰 Newsletter Topics - 2025-04-10</h1>
+  <div id="topics">Loading topics...</div>
+
+  <script>
+    fetch("topics_Thu_10_Apr_2025_rewritten_chinese.json")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("topics");
+        container.innerHTML = "";
+
+        data.forEach(topic => {
+          const div = document.createElement("div");
+          div.className = "topic";
+
+          div.innerHTML = `
+            <div class="title"><a href="${topic.link}" target="_blank">${topic.title}</a></div>
+            <div class="date">📅 ${topic.date}</div>
+
+            ${topic.new_image ? `<img src="${topic.new_image}" alt="Topic Image">` : ''}
+
+            <div class="section-header">📰 Original Content</div>
+            <div class="content">${topic.content.replace(/\n/g, '<br>')}</div>
+
+            <div class="section-header">✍️ Rewritten (English)</div>
+            <div class="content">${topic.rewrite.replace(/\n/g, '<br>')}</div>
+
+            <div class="section-header">🌏 中文翻译</div>
+            <div class="content">${topic.chinese.replace(/\n/g, '<br>')}</div>
+          `;
+
+          container.appendChild(div);
+        });
+      })
+      .catch(err => {
+        console.error("Error loading JSON:", err);
+        document.getElementById("topics").innerText = "⚠️ Failed to load newsletter content.";
+      });
+  </script>
+
+</body>
+</html>

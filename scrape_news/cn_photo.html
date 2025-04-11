@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RSS Rewritten Topics</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f4f4f4;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+    .topic {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+    .title {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    .date {
+      font-size: 0.9rem;
+      color: gray;
+    }
+    .link {
+      margin-top: 0.5rem;
+      display: block;
+    }
+    .markdown {
+      margin-top: 1rem;
+    }
+    .chinese-title {
+      font-size: 1.2rem;
+      color: #006400;
+      margin-top: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📚 Curated Newsletter Topics</h1>
+  <div id="topics"></div>
+
+  <script>
+    fetch('topics_Thu_10_Apr_2025_rewritten_cn_picture.json') // <-- replace with your actual filename
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('topics');
+
+        data.forEach(topic => {
+          const div = document.createElement('div');
+          div.className = 'topic';
+
+          const imageSrc = topic.new_image || topic.imageUrl;
+
+          div.innerHTML = `
+            <div class="title">${topic.title}</div>
+            <div class="chinese-title">${topic.title_cn}</div>
+            <div class="date">📅 ${topic.date}</div>
+            <a class="link" href="${topic.link}" target="_blank">🔗 Read Original</a>
+            ${imageSrc ? `<img src="${imageSrc}" alt="Topic Image" />` : ''}
+            <div class="markdown"><strong>📝 English Summary:</strong><div class="rewrite"></div></div>
+            <div class="markdown"><strong>🌏 中文翻译：</strong><div class="chinese"></div></div>
+          `;
+
+          // Render markdown
+          div.querySelector(".rewrite").innerHTML = marked.parse(topic.rewrite || "");
+          div.querySelector(".chinese").innerHTML = marked.parse(topic.chinese || "");
+
+          container.appendChild(div);
+        });
+      })
+      .catch(err => {
+        document.getElementById('topics').innerHTML = '<p>Failed to load topics.</p>';
+        console.error(err);
+      });
+  </script>
+
+</body>
+</html>
